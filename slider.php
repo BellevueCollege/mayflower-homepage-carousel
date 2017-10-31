@@ -63,7 +63,9 @@ function mhcarousel_bc_slider_register() {
            );
 
 		register_post_type( 'slider' , $args );
-    }
+	}
+	
+add_shortcode('mayflower-carousel', 'mhcarousel_bc_slider_register');
 
 ///////////////////////////////////////
 // - Add a sub menu to the featured slider menu
