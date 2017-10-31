@@ -13,9 +13,10 @@ Author URI:
 ## - Hide Page Links to in Slider posts
 ########################################
 
-add_filter( 'page-links-to-post-types', 'remove_plt_from_slider' );
 
-function remove_plt_from_slider( $post_types )
+add_filter( 'page-links-to-post-types', 'mhcarousel_remove_plt_from_slider' );
+
+function mhcarousel_remove_plt_from_slider( $post_types )
 {
     $key = array_search( 'slider',  $post_types );
     if( $key !== false ) {
@@ -30,9 +31,9 @@ function remove_plt_from_slider( $post_types )
 ///////////////////////////////////////
 
 
-    add_action('init', 'bc_slider_register');
+add_action('init', 'mhcarousel_bc_slider_register');
 
-    function bc_slider_register() {
+function mhcarousel_bc_slider_register() {
 		$labels = array(
 			'name' => 'Featured Slider',
 			'singular_name' => 'Slide', 
@@ -61,17 +62,16 @@ function remove_plt_from_slider( $post_types )
 			'taxonomies' => array(/*'category', 'post_tag',*/) // this is IMPORTANT
            );
 
-        register_post_type( 'slider' , $args );
+		register_post_type( 'slider' , $args );
     }
-
 
 ///////////////////////////////////////
 // - Add a sub menu to the featured slider menu
 ///////////////////////////////////////
 
-add_action( 'admin_menu', 'mayflower_register_slider_sort_page' );
+add_action( 'admin_menu', 'mhcarousel_register_slider_sort_page' );
 
-function mayflower_register_slider_sort_page() {
+function mhcarousel_register_slider_sort_page() {
 	add_submenu_page(
 		'edit.php?post_type=slider',
 		'Order Slides',
@@ -87,17 +87,13 @@ function mayflower_register_slider_sort_page() {
 // - Create an interface showing each slide with a handle to sort
 ///////////////////////////////////////
 
-function slider_order_page() {
+function mhcarousel_slider_order_page() {
 ?>
 	<div class="wrap">
 		<h2>Sort Slides</h2>
 		<p>Simply drag the slide up or down and it will be saved in that order.</p>
 	<?php $slides = new WP_Query( array( 'post_type' => 'slider', 'posts_per_page' => -1, 'order' => 'ASC', 'orderby' => 'menu_order' ) ); ?>
 	<?php if( $slides->have_posts() ) : ?>
-
-
-
-
 
 		<table class="wp-list-table widefat fixed posts" id="sortable-table">
 			<thead>
@@ -172,16 +168,12 @@ function slider_order_page() {
 // - Create an interface showing each slide with a handle to sort
 ///////////////////////////////////////
 
-add_action( 'admin_enqueue_scripts', 'mayflower_slider_enqueue_scripts' );
+add_action( 'admin_enqueue_scripts', 'mhcarousel_slider_enqueue_scripts' );
 
-function mayflower_slider_enqueue_scripts() {
+function mhcarousel_slider_enqueue_scripts() {
 	wp_enqueue_script( 'jquery-ui-sortable' );
 	wp_enqueue_script( 'mayflower-admin-scripts', get_template_directory_uri() . '/js/sorting-v2.js' );
 }
-
-
-
-
 
 
 ###########################
@@ -203,7 +195,7 @@ function mayflower_slider_enqueue_scripts() {
 
 
 if (is_admin()) :
-function slider_remove_meta_boxes() {
+function mhcarousel_slider_remove_meta_boxes() {
   remove_meta_box('categorydiv', 'slider', 'normal');
   remove_meta_box('tagsdiv-post_tag', 'slider', 'normal');
   remove_meta_box('authordiv', 'slider', 'normal');
@@ -218,7 +210,7 @@ endif;
 // Custom Post Title text for Slider CPT
 /////////////////////////////////////////
 
-function mayflower_slider_title_text( $title ){
+function mhcarousel_slider_title_text( $title ){
 $screen = get_current_screen();
 if ( 'slider' == $screen->post_type ) {
 $title = 'Name of Slide';
@@ -226,7 +218,7 @@ $title = 'Name of Slide';
 return $title;
 }
 
-add_filter( 'enter_title_here', 'mayflower_slider_title_text' );
+add_filter( 'enter_title_here', 'mhcarousel_slider_title_text' );
 
 
 ///////////////////////////////////////
@@ -234,9 +226,9 @@ add_filter( 'enter_title_here', 'mayflower_slider_title_text' );
 ///////////////////////////////////////
 
 // Add to admin_init function
-add_filter('manage_edit-slider_columns', 'add_slider_columns');
+add_filter('manage_edit-slider_columns', 'mhcarousel_add_slider_columns');
 
-function add_slider_columns($slider_columns) {
+function mhcarousel_add_slider_columns($slider_columns) {
 	$slider_columns = array (
 		'cb' => '<input type="checkbox" />',
 		'slider-thumbnail' => 'Featured Image',
@@ -251,9 +243,9 @@ function add_slider_columns($slider_columns) {
 }
 
 // Add to admin_init function
-add_action('manage_slider_posts_custom_column', 'manage_slider_columns', 10, 2);
+add_action('manage_slider_posts_custom_column', 'mhcarousel_manage_slider_columns', 10, 2);
 
-function manage_slider_columns($column, $post_id) {
+function mhcarousel_manage_slider_columns($column, $post_id) {
 	global $post;
 
 	switch( $column ) {
@@ -272,8 +264,8 @@ function manage_slider_columns($column, $post_id) {
 
 } //end function
 
-add_action('admin_head', 'mayflower_slider_custom_styles');
-function mayflower_slider_custom_styles() {
+add_action('admin_head', 'mhcarousel_slider_custom_styles');
+function mhcarousel_slider_custom_styles() {
 	$output_css = '<style type="text/css">
 		.column-slider-thumbnail {
 			width: 300px;
@@ -283,8 +275,8 @@ function mayflower_slider_custom_styles() {
 }
 
 /* Fire our meta box setup function on the post editor screen. */
-add_action( 'load-post.php', 'add_slider_ext_url_mb' );
-add_action( 'load-post-new.php', 'add_slider_ext_url_mb' );
+add_action( 'load-post.php', 'mhcarousel_add_slider_ext_url_mb' );
+add_action( 'load-post-new.php', 'mhcarousel_add_slider_ext_url_mb' );
 
 
 ///////////////////////////////////////
@@ -292,7 +284,7 @@ add_action( 'load-post-new.php', 'add_slider_ext_url_mb' );
 ///////////////////////////////////////
 
 // Add the Meta Box
-function add_slider_ext_url_mb() {
+function mhcarousel_add_slider_ext_url_mb() {
     add_meta_box(
 		'slider_external_url', // $id
 		'Slide URL', // $title
@@ -301,7 +293,7 @@ function add_slider_ext_url_mb() {
 		'normal', // $context
 		'high'); // $priority
 }
-add_action('add_meta_boxes', 'add_slider_ext_url_mb');
+add_action('add_meta_boxes', 'mhcarousel_add_slider_ext_url_mb');
 
 // Field Array
 $prefix = '_slider_';
@@ -315,7 +307,7 @@ $slider_custom_meta_fields = array(
 );
 
 // The Callback
-function show_slider_ext_url() {
+function mhcarousel_show_slider_ext_url() {
 global $slider_custom_meta_fields, $post;
 // Use nonce for verification
 echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce(basename(__FILE__)).'" />';
@@ -342,7 +334,7 @@ echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce
 }
 
 // Save the Data
-function save_slider_custom_meta($post_id) {
+function mhcarousel_save_slider_custom_meta($post_id) {
     global $slider_custom_meta_fields;
 
 	// verify nonce
@@ -370,4 +362,4 @@ function save_slider_custom_meta($post_id) {
 		}
 	} // end foreach
 }
-add_action('save_post', 'save_slider_custom_meta');
+add_action('save_post', 'mhcarousel_save_slider_custom_meta');
