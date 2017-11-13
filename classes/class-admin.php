@@ -5,42 +5,43 @@
  *
  * - Add a sub menu to the featured slider menu
  * - Create interface showing each slide with a handle to sort
+ * - Remove Unncessary Meta Boxes on Slider Admin Screen
  * - Create custom columns for slider post type
  * - Create custom columns for slider posts
  * - Add custom styles to columns
- * - Remove Unncessary Meta Boxes on Slider Admin Screen
  *
  */
 
 class Admin {
     
-    function __construct(){
-        add_action( 'admin_menu', 'register_slider_sort_page' );
-        add_filter( 'manage_edit-slider_columns', 'add_slider_columns'); // Add to admin_init function
-        add_action( 'manage_slider_posts_custom_column', 'manage_slider_columns', 10, 2); // Add to admin_init function
-        add_action( 'admin_head', 'slider_custom_styles');
-        add_action( 'manage_slider_meta_boxes', 'register_slider_remove_meta' );
+    public function __construct(){
+        add_action( 'admin_menu',  array ($this,'register_slider_sort_page' ));
+        add_action( 'admin_enqueue_scripts',  array ($this, 'slider_enqueue_scripts' ));
+        add_action( 'admin_menu', array ($this,'slider_remove_meta_boxes' ));
+        add_filter('manage_edit-slider_columns',  array ($this, 'add_slider_columns'));
+        add_action('manage_slider_posts_custom_column',  array ($this, 'manage_slider_columns'), 10, 2);
+        add_action('admin_head',  array ($this, 'slider_custom_styles'));
     }
 
-    function register_slider_sort_page() {
-        ///////////////////////////////////////
-        // - Add a sub menu to the featured slider menu
-        ///////////////////////////////////////
+    ///////////////////////////////////////
+    // - Add a sub menu to the featured slider menu
+    ///////////////////////////////////////
+    public function register_slider_sort_page() {
         add_submenu_page(
             'edit.php?post_type=slider',
             'Order Slides',
             'Re-Order',
             'edit_pages', 
             'slider-order',
-            'slider_order_page'
+            array($this, 'slider_order_page')
         );
     }
 
+    ///////////////////////////////////////
+    // - Create an interface showing each slide with a handle to sort
+    ///////////////////////////////////////
     //The callback to register_slider_sort_page()
-    function slider_order_page() {
-        ///////////////////////////////////////
-        // - Create an interface showing each slide with a handle to sort
-        ///////////////////////////////////////
+    public function slider_order_page() {
         ?>
             <div class="wrap">
                 <h2>Sort Slides</h2>
@@ -110,10 +111,31 @@ class Admin {
         <?php
     }
 
-    function add_slider_columns($slider_columns) {
-        ///////////////////////////////////////
-        // Custom Columns for Slider Post type
-        ///////////////////////////////////////
+    ///////////////////////////////////////
+    // - Create an interface showing each slide with a handle to sort
+    ///////////////////////////////////////
+    public function slider_enqueue_scripts() {
+	    wp_enqueue_script( 'jquery-ui-sortable' );
+	    wp_enqueue_script( 'mayflower-admin-scripts', get_template_directory_uri() . '/js/sorting-v2.js' );
+    }
+
+    ////////////////////////////////////////////////////
+    // Remove Unncessary Meta Boxes on Slider Admin Screen
+    /////////////////////////////////////////////////////
+    public function slider_remove_meta_boxes() {
+        if (is_admin()) {
+              remove_meta_box('categorydiv', 'slider', 'normal');
+              remove_meta_box('tagsdiv-post_tag', 'slider', 'normal');
+              remove_meta_box('authordiv', 'slider', 'normal');
+              remove_meta_box('commentstatusdiv', 'slider', 'normal');
+              remove_meta_box('commentsdiv', 'slider', 'normal');
+              remove_meta_box('revisionsdiv', 'slider', 'normal');
+        }
+    }
+    ///////////////////////////////////////
+    // Custom Columns for Slider Post type
+    ///////////////////////////////////////
+    public function add_slider_columns($slider_columns) {
         $slider_columns = array (
             'cb' => '<input type="checkbox" />',
             'slider-thumbnail' => 'Featured Image',
@@ -127,10 +149,10 @@ class Admin {
         return $slider_columns;
     }
 
-    function manage_slider_columns($column, $post_id) {
-        ///////////////////////////////////////
-        // Custom Columns for Slider Posts
-        ///////////////////////////////////////
+    ///////////////////////////////////////
+    // Custom Columns for Slider Posts
+    ///////////////////////////////////////
+    public function manage_slider_columns($column, $post_id) {
         global $post;
 
         switch( $column ) {
@@ -149,10 +171,10 @@ class Admin {
 
     } //end function
 
-    function slider_custom_styles() {
-        ///////////////////////////////////////
-        // Custom Styles for Columns
-        ///////////////////////////////////////
+    ///////////////////////////////////////
+    // Custom Styles for Columns
+    ///////////////////////////////////////
+    public function slider_custom_styles() {
         $output_css = '<style type="text/css">
             .column-slider-thumbnail {
                 width: 300px;
@@ -160,27 +182,8 @@ class Admin {
         </style>';
         echo $output_css;
     }
-
-    function register_slider_remove_meta(){
-        ////////////////////////////////////////////////////
-        // Call slider_remove_meta_boxes if it is an admin page on slider
-        /////////////////////////////////////////////////////
-        if (is_admin()) :
-            $this->slider_remove_meta_boxes();
-        endif;
-    }
-
-    function slider_remove_meta_boxes() {
-        ////////////////////////////////////////////////////
-        // Remove Unncessary Meta Boxes on Slider Admin Screen
-        /////////////////////////////////////////////////////
-        remove_meta_box('categorydiv', 'slider', 'normal');
-        remove_meta_box('tagsdiv-post_tag', 'slider', 'normal');
-        remove_meta_box('authordiv', 'slider', 'normal');
-        remove_meta_box('commentstatusdiv', 'slider', 'normal');
-        remove_meta_box('commentsdiv', 'slider', 'normal');
-        remove_meta_box('revisionsdiv', 'slider', 'normal');
-    }
 }
+
+$mh_class_admin = new Admin();
 
 
