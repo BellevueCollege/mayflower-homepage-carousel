@@ -132,6 +132,7 @@ class Admin {
               remove_meta_box('revisionsdiv', 'slider', 'normal');
         }
     }
+    
     ///////////////////////////////////////
     // Custom Columns for Slider Post type
     ///////////////////////////////////////

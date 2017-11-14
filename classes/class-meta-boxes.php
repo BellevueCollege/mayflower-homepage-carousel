@@ -11,6 +11,15 @@
 
 class Meta_Boxes {
 
+    private $slider_custom_meta_fields = array(
+        array(
+            'label'=> 'Slide URL',
+            'desc'	=> 'Enter the URL associated with this ad.',
+            'id'	=> '_slider_url',
+            'type'	=> 'url'
+        ),
+    );
+
     public function __construct() {
         // Fire our meta box setup function on the post editor screen. 
         add_action( 'load-post.php', array ($this, 'add_slider_ext_url_mb' ));
@@ -35,12 +44,12 @@ class Meta_Boxes {
 
     // The Callback to add_slider_ext_url_mb() 
     public function show_slider_ext_url() {
-        global $slider_custom_meta_fields, $post;
+        global $post;
         // Use nonce for verification
         echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce(basename(__FILE__)).'" />';
         // Begin the field table and loop
         echo '<table class="form-table">';
-        foreach ($slider_custom_meta_fields as $field) {
+        foreach ($this->slider_custom_meta_fields as $field) {
             // get value of this field if it exists for this post
             $meta = get_post_meta($post->ID, $field['id'], true);
             // begin a table row with
@@ -63,7 +72,6 @@ class Meta_Boxes {
     // Save the data
     ////////////////////
     public function save_slider_custom_meta($post_id) {
-        global $slider_custom_meta_fields;
 
         // verify nonce
         if ( !isset( $_POST['custom_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['custom_meta_box_nonce'], basename( __FILE__ ) ) )
@@ -80,7 +88,7 @@ class Meta_Boxes {
                 return $post_id;
         }
         // loop through fields and save the data
-        foreach ($slider_custom_meta_fields as $field) {
+        foreach ($this->slider_custom_meta_fields as $field) {
             $old = get_post_meta($post_id, $field['id'], true);
             $new = $_POST[$field['id']];
             if ($new && $new != $old) {
@@ -92,14 +100,6 @@ class Meta_Boxes {
     }
 }
 
-$prefix = '_slider_';
-$slider_custom_meta_fields = array(
-	array(
-		'label'=> 'Slide URL',
-		'desc'	=> 'Enter the URL associated with this ad.',
-		'id'	=> $prefix.'url',
-		'type'	=> 'url'
-	),
-);
+
 
 $mh_class_meta = new Meta_Boxes();
