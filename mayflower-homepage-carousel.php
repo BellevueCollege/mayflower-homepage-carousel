@@ -28,6 +28,7 @@ class Mayflower_Homepage_Carousel {
 
 	public function __construct() {
 		add_action( 'init', array( $this, 'bc_slider_register' ) );
+		add_action( 'after_setup_theme', array( $this, 'image_sizes' ) );
 	}
 
 	public function bc_slider_register() {
@@ -61,6 +62,10 @@ class Mayflower_Homepage_Carousel {
 		);
 
 		register_post_type( 'slider', $args );
+	}
+
+	public function image_sizes() {
+		add_image_size( 'mhcarousel-featured-size', 1170, 488, true );
 	}
 }
 
