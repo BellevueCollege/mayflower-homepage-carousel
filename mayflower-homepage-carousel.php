@@ -20,9 +20,9 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
  */
 
 // Include classes
-require_once plugin_dir_path( __FILE__ ) . 'classes/class-slider-interface.php';
-require_once plugin_dir_path( __FILE__ ) . 'classes/class-admin.php';
-require_once plugin_dir_path( __FILE__ ) . 'classes/class-meta-boxes.php';
+require_once plugin_dir_path( __FILE__ ) . 'classes/class-mhcarousel-slider-interface.php';
+require_once plugin_dir_path( __FILE__ ) . 'classes/class-mhcarousel-admin.php';
+require_once plugin_dir_path( __FILE__ ) . 'classes/class-mhcarousel-meta-boxes.php';
 
 class Mayflower_Homepage_Carousel {
 

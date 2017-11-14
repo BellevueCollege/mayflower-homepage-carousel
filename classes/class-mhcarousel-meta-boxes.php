@@ -8,7 +8,7 @@
  * - Add Meta Fields
  */
 
-class Meta_Boxes {
+class Mhcarousel_Meta_Boxes {
 
 	private $slider_custom_meta_fields = array(
 		array(
@@ -46,7 +46,7 @@ class Meta_Boxes {
 	public function show_slider_ext_url() {
 		global $post;
 		// Use nonce for verification
-		echo '<input type="hidden" name="custom_meta_box_nonce" value="' . wp_create_nonce( basename( __FILE__ ) ) . '" />';
+		echo '<input type="hidden" name="custom_meta_box_nonce" value="' . esc_attr( wp_create_nonce( basename( __FILE__ ) ) ) . '" />';
 		// Begin the field table and loop
 		echo '<table class="form-table">';
 		foreach ( $this->slider_custom_meta_fields as $field ) {
@@ -54,13 +54,13 @@ class Meta_Boxes {
 			$meta = get_post_meta( $post->ID, $field['id'], true );
 			// begin a table row with
 			echo '<tr>
-                    <th><label for="' . $field['id'] . '">' . $field['label'] . '</label></th>
+                    <th><label for="' . esc_attr( $field['id'] ) . '">' . esc_attr( $field['label'] ) . '</label></th>
                     <td>';
 			switch ( $field['type'] ) {
 				// case items will go here
 				case 'url':
-					echo '<input type="text" name="' . $field['id'] . '" id="' . $field['id'] . '" value="' . esc_url( $meta ) . '" size="30" class="widefat" placeholder="https://" />
-                                <br /><span class="description">' . $field['desc'] . '</span>';
+					echo '<input type="text" name="' . esc_attr( $field['id'] ) . '" id="' . esc_attr( $field['id'] ) . '" value="' . esc_url( $meta ) . '" size="30" class="widefat" placeholder="https://" />
+                                <br /><span class="description">' . esc_attr( $field['desc'] ) . '</span>';
 					break;
 			} //end switch
 			echo '</td></tr>';
@@ -102,4 +102,4 @@ class Meta_Boxes {
 	}
 }
 
-$mh_class_meta = new Meta_Boxes();
+$mhcarousel_class_meta = new Mhcarousel_Meta_Boxes();

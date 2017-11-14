@@ -7,7 +7,7 @@
  * - Add Custom Post Title text for Slider CPT
  */
 
-class Slider_Interface {
+class Mhcarousel_Slider_Interface {
 
 	public function __construct() {
 		add_filter( 'page-links-to-post-types', array( $this, 'remove_plt_from_slider' ) );
@@ -37,4 +37,4 @@ class Slider_Interface {
 	}
 }
 
-$mh_class_slider = new Slider_Interface();
+$mhcarousel_class_slider = new Mhcarousel_Slider_Interface();

@@ -11,7 +11,7 @@
  * - Add custom styles to columns
  */
 
-class Admin {
+class Mhcarousel_Admin {
 
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'register_slider_sort_page' ) );
@@ -19,7 +19,6 @@ class Admin {
 		add_action( 'admin_menu', array( $this, 'slider_remove_meta_boxes' ) );
 		add_filter( 'manage_edit-slider_columns', array( $this, 'add_slider_columns' ) );
 		add_action( 'manage_slider_posts_custom_column', array( $this, 'manage_slider_columns' ), 10, 2 );
-		add_action( 'admin_head', array( $this, 'slider_custom_styles' ) );
 	}
 
 	//
@@ -71,7 +70,7 @@ class Admin {
 					$slides->the_post();
 				?>
 					<tr id="post-<?php the_ID(); ?>">
-						<td class="column-order"><img src="<?php echo get_template_directory_uri() . '/img/row-move.png'; ?>" title="" alt="Change Order" width="16" height="16" class="" aria-dropeffect="move" /></td>
+						<td class="column-order"><img src="<?php echo esc_url( get_template_directory_uri() . '/img/row-move.png' ); ?>" title="" alt="Change Order" width="16" height="16" class="" aria-dropeffect="move" /></td>
 						<td class="thumbnail column-thumbnail">
 							<div class="item active">
 								<div class="img-wrapper">
@@ -110,8 +109,10 @@ class Admin {
 	public function slider_enqueue_scripts( $hook ) {
 		if ( 'slider_page_slider-order' === $hook ) {
 			wp_enqueue_script( 'jquery-ui-sortable' );
-			wp_enqueue_script( 'mayflower-admin-scripts', plugin_dir_url( dirname( __FILE__ ) ) . 'js/sorting-v2.js' );
-			wp_enqueue_style( 'mayflower-style-scripts', plugin_dir_url( dirname( __FILE__ ) ) . 'css/sorting.css' );
+			wp_enqueue_script( 'mhcarousel-sorting-scripts', plugin_dir_url( dirname( __FILE__ ) ) . 'js/sorting-v2.js' );
+			wp_enqueue_style( 'mhcarousel-sorting-styles', plugin_dir_url( dirname( __FILE__ ) ) . 'css/sorting.css' );
+		} elseif ( 'slider_page' === $hook ) {
+			wp_enqueue_style( 'mhcarousel-main-styles', plugin_dir_url( dirname( __FILE__ ) ) . 'css/main.css' );
 		}
 	}
 
@@ -159,24 +160,11 @@ class Admin {
 			case 'slider_link_to':
 				/* Get the post meta. */
 				$slider_ext_url = get_post_meta( $post->ID, '_slider_url', true );
-				echo $slider_ext_url;
+				echo esc_url( $slider_ext_url );
 				break;
 			default:
 		} //end switch
-
 	} //end function
-
-	//
-	// Custom Styles for Columns
-	//
-	public function slider_custom_styles() {
-		$output_css = '<style type="text/css">
-			.column-slider-thumbnail {
-				width: 300px;
-			}
-		</style>';
-		echo $output_css;
-	}
 }
 
-$mh_class_admin = new Admin();
+$mhcarousel_class_admin = new Mhcarousel_Admin();
