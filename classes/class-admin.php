@@ -102,33 +102,21 @@ class Admin {
 
 			<?php wp_reset_postdata(); // Don't forget to reset again! ?>
 
-			<style>
-			/* Dodgy CSS ^_^ */
-			#sortable-table td { background: white; }
-			#sortable-table .column-order { padding: 3px 10px; width: 60px; }
-			#sortable-table .column-order img { cursor: move; }
-			#sortable-table td.column-order { vertical-align: middle; text-align: center; }
-			#sortable-table .column-thumbnail { width: auto; }
-			#sortable-table tbody tr.ui-state-highlight {
-			height:202px;
-			width: 100%;
-			background:white !important;
-			-webkit-box-shadow: inset 0px 1px 2px 1px rgba(0, 0, 0, 0.1);
-			-moz-box-shadow: inset 0px 1px 2px 1px rgba(0, 0, 0, 0.1);
-			box-shadow: inset 0px 1px 2px 1px rgba(0, 0, 0, 0.1);
-			}
-			</style>
 		</div><!-- .wrap -->
 
+		
 		<?php
 	}
 
 	//
 	// - Create an interface showing each slide with a handle to sort
 	//
-	public function slider_enqueue_scripts() {
-		wp_enqueue_script( 'jquery-ui-sortable' );
-		wp_enqueue_script( 'mayflower-admin-scripts', get_template_directory_uri() . '/js/sorting-v2.js' );
+	public function slider_enqueue_scripts( $hook ) {
+		if ( 'slider_page_slider-order' === $hook ) {
+			wp_enqueue_script( 'jquery-ui-sortable' );
+			wp_enqueue_script( 'mayflower-admin-scripts', plugin_dir_url( dirname( __FILE__ ) ) . 'js/sorting-v2.js' );
+			wp_enqueue_style( 'mayflower-style-scripts', plugin_dir_url( dirname( __FILE__ ) ) . 'css/sorting.css' );
+		}
 	}
 
 	//
@@ -145,7 +133,7 @@ class Admin {
 		}
 	}
 
-		//
+	//
 	// Custom Columns for Slider Post type
 	//
 	public function add_slider_columns( $slider_columns ) {
