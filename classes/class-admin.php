@@ -13,7 +13,6 @@
 
 class Admin {
 
-
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'register_slider_sort_page' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'slider_enqueue_scripts' ) );
@@ -46,65 +45,62 @@ class Admin {
 		<div class="wrap">
 		<h2>Sort Slides</h2>
 		<p>Simply drag the slide up or down and it will be saved in that order.</p>
-			<?php
-			$slides = new WP_Query(
-				array(
-					'post_type'      => 'slider',
-					'posts_per_page' => -1,
-					'order'          => 'ASC',
-					'orderby'        => 'menu_order',
-				)
-			);
-			?>
-			<?php if ( $slides->have_posts() ) : ?>
-
-						<table class="wp-list-table widefat fixed posts" id="sortable-table">
-					<thead>
-						<tr>
-							<th class="column-order">Re-Order</th>
-							<th class="column-thumbnail">Thumbnail</th>
-							<th class="column-title">Title</th>
-							<!-- <th class="column-title">Details</th> -->
-						</tr>
-					</thead>
-					<tbody data-post-type="slider">
 		<?php
-		while ( $slides->have_posts() ) :
-			$slides->the_post();
+		$slides = new WP_Query(
+			array(
+				'post_type'      => 'slider',
+				'posts_per_page' => -1,
+				'order'          => 'ASC',
+				'orderby'        => 'menu_order',
+			)
+		);
 		?>
-						<tr id="post-<?php the_ID(); ?>">
-							<td class="column-order"><img src="<?php echo get_template_directory_uri() . '/img/row-move.png'; ?>" title="" alt="Change Order" width="16" height="16" class="" aria-dropeffect="move" /></td>
-							<td class="thumbnail column-thumbnail">
-								<div class="item active">
-									<div class="img-wrapper">
-			<?php the_post_thumbnail( 'sort-screen-thumbnail' ); ?>
-									</div><!-- img-wrapper -->
-								</div><!-- item active -->
-							</td>
-							<td class="column-title"><strong><?php the_title(); ?></strong></td>
-							<!-- <td class="column-details"><div class="excerpt"><?php the_excerpt(); ?></div></td> -->
-						</tr>
-		<?php endwhile; ?>
-					</tbody>
-					<tfoot>
-						<tr>
-							<th class="column-order">Order</th>
-							<th class="column-thumbnail">Thumbnail</th>
-							<th class="column-title">Title</th>
-							<!-- <th class="column-title">Details</th> -->
-						</tr>
-					</tfoot>
-				</table>
+		<?php if ( $slides->have_posts() ) : ?>
+			<table class="wp-list-table widefat fixed posts" id="sortable-table">
+				<thead>
+					<tr>
+						<th class="column-order">Re-Order</th>
+						<th class="column-thumbnail">Thumbnail</th>
+						<th class="column-title">Title</th>
+						<!-- <th class="column-title">Details</th> -->
+					</tr>
+				</thead>
+				<tbody data-post-type="slider">
+				<?php
+				while ( $slides->have_posts() ) :
+					$slides->the_post();
+				?>
+					<tr id="post-<?php the_ID(); ?>">
+						<td class="column-order"><img src="<?php echo get_template_directory_uri() . '/img/row-move.png'; ?>" title="" alt="Change Order" width="16" height="16" class="" aria-dropeffect="move" /></td>
+						<td class="thumbnail column-thumbnail">
+							<div class="item active">
+								<div class="img-wrapper">
+									<?php the_post_thumbnail( 'sort-screen-thumbnail' ); ?>
+								</div><!-- img-wrapper -->
+							</div><!-- item active -->
+						</td>
+						<td class="column-title"><strong><?php the_title(); ?></strong></td>
+						<!-- <td class="column-details"><div class="excerpt"><?php the_excerpt(); ?></div></td> -->
+					</tr>
+				<?php endwhile; ?>
+				</tbody>
+				<tfoot>
+					<tr>
+						<th class="column-order">Order</th>
+						<th class="column-thumbnail">Thumbnail</th>
+						<th class="column-title">Title</th>
+						<!-- <th class="column-title">Details</th> -->
+					</tr>
+				</tfoot>
+			</table>
 
-			<?php else : ?>
-				<p>No slides found, why not <a href="post-new.php?post_type=slider">create one?</a></p>
-			<?php endif; ?>
+		<?php else : ?>
+			<p>No slides found, why not <a href="post-new.php?post_type=slider">create one?</a></p>
+		<?php endif; ?>
 
-			<?php wp_reset_postdata(); // Don't forget to reset again! ?>
+		<?php wp_reset_postdata(); ?> <!-- Don't forget to reset again! -->
 
-		</div><!-- .wrap -->
-
-		
+		</div> <!-- .wrap -->
 		<?php
 	}
 
@@ -157,7 +153,6 @@ class Admin {
 		global $post;
 
 		switch ( $column ) {
-
 			case 'slider-thumbnail':
 				echo get_the_post_thumbnail( $post->ID, 'sort-screen-thumbnail' );
 				break;

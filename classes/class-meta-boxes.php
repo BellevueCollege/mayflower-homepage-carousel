@@ -72,7 +72,6 @@ class Meta_Boxes {
 	// Save the data
 	//
 	public function save_slider_custom_meta( $post_id ) {
-
 		// verify nonce
 		if ( ! isset( $_POST['custom_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['custom_meta_box_nonce'], basename( __FILE__ ) ) ) {
 			return $post_id;
@@ -102,7 +101,5 @@ class Meta_Boxes {
 		} // end foreach
 	}
 }
-
-
 
 $mh_class_meta = new Meta_Boxes();

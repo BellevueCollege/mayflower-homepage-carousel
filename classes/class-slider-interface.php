@@ -14,7 +14,7 @@ class Slider_Interface {
 		add_filter( 'enter_title_here', array( $this, 'slider_title_text' ) );
 	}
 
-			//
+	//
 	// - Hide Page Links to in Slider posts
 	//
 	public function remove_plt_from_slider( $post_types ) {

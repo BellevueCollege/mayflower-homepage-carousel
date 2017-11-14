@@ -6,7 +6,6 @@ jQuery(document).ready(function($) {
 		forcePlaceholderSize: true,
 		update: function(event, ui) {
 			var theOrder = $(this).sortable('toArray');
-
 			var data = {
 				action: 'mayflower_cpt_update_post_order',
 				postType: $(this).attr('data-post-type'),
