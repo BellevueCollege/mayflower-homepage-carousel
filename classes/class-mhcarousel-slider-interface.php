@@ -18,7 +18,7 @@ class Mhcarousel_Slider_Interface {
 	// - Hide Page Links to in Slider posts
 	//
 	public function remove_plt_from_slider( $post_types ) {
-		$key = array_search( 'slider', $post_types );
+		$key = array_search( 'mhcarousel', $post_types );
 		if ( false !== $key ) {
 			unset( $post_types[ $key ] );
 		}
@@ -30,7 +30,7 @@ class Mhcarousel_Slider_Interface {
 	//
 	public function slider_title_text( $title ) {
 		$screen = get_current_screen();
-		if ( 'slider' == $screen->post_type ) {
+		if ( 'mhcarousel' == $screen->post_type ) {
 			$title = 'Name of Slide';
 		}
 		return $title;

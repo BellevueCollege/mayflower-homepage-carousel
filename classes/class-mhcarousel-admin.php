@@ -9,6 +9,7 @@
  * - Create custom columns for slider post type
  * - Create custom columns for slider posts
  * - Add custom styles to columns
+ * - Save post order on custom post order page
  */
 
 class Mhcarousel_Admin {
@@ -16,9 +17,10 @@ class Mhcarousel_Admin {
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'register_slider_sort_page' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'slider_enqueue_scripts' ) );
+		add_action( 'wp_ajax_mhcarousel_update_post_order', array( $this, 'update_post_order' ) );
 		add_action( 'admin_menu', array( $this, 'slider_remove_meta_boxes' ) );
-		add_filter( 'manage_edit-slider_columns', array( $this, 'add_slider_columns' ) );
-		add_action( 'manage_slider_posts_custom_column', array( $this, 'manage_slider_columns' ), 10, 2 );
+		add_filter( 'manage_edit-mhcarousel_columns', array( $this, 'add_slider_columns' ) );
+		add_action( 'manage_mhcarousel_posts_custom_column', array( $this, 'manage_slider_columns' ), 10, 2 );
 	}
 
 	//
@@ -26,7 +28,7 @@ class Mhcarousel_Admin {
 	//
 	public function register_slider_sort_page() {
 		add_submenu_page(
-			'edit.php?post_type=slider',
+			'edit.php?post_type=mhcarousel',
 			'Order Slides',
 			'Re-Order',
 			'edit_pages',
@@ -47,7 +49,7 @@ class Mhcarousel_Admin {
 		<?php
 		$slides = new WP_Query(
 			array(
-				'post_type'      => 'slider',
+				'post_type'      => 'mhcarousel',
 				'posts_per_page' => -1,
 				'order'          => 'ASC',
 				'orderby'        => 'menu_order',
@@ -64,7 +66,7 @@ class Mhcarousel_Admin {
 						<!-- <th class="column-title">Details</th> -->
 					</tr>
 				</thead>
-				<tbody data-post-type="slider">
+				<tbody data-post-type="mhcarousel">
 				<?php
 				while ( $slides->have_posts() ) :
 					$slides->the_post();
@@ -74,7 +76,7 @@ class Mhcarousel_Admin {
 						<td class="thumbnail column-thumbnail">
 							<div class="item active">
 								<div class="img-wrapper">
-									<?php the_post_thumbnail( 'sort-screen-thumbnail' ); ?>
+									<?php the_post_thumbnail( 'mhcarousel-thumbnail-size' ); ?>
 								</div><!-- img-wrapper -->
 							</div><!-- item active -->
 						</td>
@@ -94,7 +96,7 @@ class Mhcarousel_Admin {
 			</table>
 
 		<?php else : ?>
-			<p>No slides found, why not <a href="post-new.php?post_type=slider">create one?</a></p>
+			<p>No slides found, why not <a href="post-new.php?post_type=mhcarousel">create one?</a></p>
 		<?php endif; ?>
 
 		<?php wp_reset_postdata(); ?> <!-- Don't forget to reset again! -->
@@ -107,13 +109,35 @@ class Mhcarousel_Admin {
 	// - Create an interface showing each slide with a handle to sort
 	//
 	public function slider_enqueue_scripts( $hook ) {
-		if ( 'slider_page_slider-order' === $hook ) {
+		if ( 'mhcarousel_page_slider-order' === $hook ) {
 			wp_enqueue_script( 'jquery-ui-sortable' );
 			wp_enqueue_script( 'mhcarousel-sorting-scripts', plugin_dir_url( dirname( __FILE__ ) ) . 'js/sorting-v2.js' );
 			wp_enqueue_style( 'mhcarousel-sorting-styles', plugin_dir_url( dirname( __FILE__ ) ) . 'css/sorting.css' );
-		} elseif ( 'slider_page' === $hook ) {
+		} elseif ( 'mhcarousel_page' === $hook ) {
 			wp_enqueue_style( 'mhcarousel-main-styles', plugin_dir_url( dirname( __FILE__ ) ) . 'css/main.css' );
 		}
+	}
+
+	//
+	// - Save post order on custom post order page
+	//
+	public function update_post_order() {
+		$post_type = $_POST['postType'];
+		$order     = $_POST['order'];
+		/**
+		* Expect: $sorted = array(
+		* menu_order => post-XX
+		* );
+		*/
+		foreach ( $order as $menu_order => $post_id ) {
+			$post_id = intval( str_ireplace( 'post-', '', $post_id ) );
+			$menu_order = intval( $menu_order );
+			wp_update_post( array(
+				'ID' => $post_id,
+				'menu_order' => $menu_order,
+			) );
+		}
+		die( '1' );
 	}
 
 	//
@@ -121,12 +145,12 @@ class Mhcarousel_Admin {
 	//
 	public function slider_remove_meta_boxes() {
 		if ( is_admin() ) {
-			remove_meta_box( 'categorydiv', 'slider', 'normal' );
-			remove_meta_box( 'tagsdiv-post_tag', 'slider', 'normal' );
-			remove_meta_box( 'authordiv', 'slider', 'normal' );
-			remove_meta_box( 'commentstatusdiv', 'slider', 'normal' );
-			remove_meta_box( 'commentsdiv', 'slider', 'normal' );
-			remove_meta_box( 'revisionsdiv', 'slider', 'normal' );
+			remove_meta_box( 'categorydiv', 'mhcarousel', 'normal' );
+			remove_meta_box( 'tagsdiv-post_tag', 'mhcarousel', 'normal' );
+			remove_meta_box( 'authordiv', 'mhcarousel', 'normal' );
+			remove_meta_box( 'commentstatusdiv', 'mhcarousel', 'normal' );
+			remove_meta_box( 'commentsdiv', 'mhcarousel', 'normal' );
+			remove_meta_box( 'revisionsdiv', 'mhcarousel', 'normal' );
 		}
 	}
 
@@ -155,7 +179,7 @@ class Mhcarousel_Admin {
 
 		switch ( $column ) {
 			case 'slider-thumbnail':
-				echo get_the_post_thumbnail( $post->ID, 'sort-screen-thumbnail' );
+				echo get_the_post_thumbnail( $post->ID, 'mhcarousel-thumbnail-size' );
 				break;
 			case 'slider_link_to':
 				/* Get the post meta. */

@@ -36,7 +36,7 @@ class Mhcarousel_Meta_Boxes {
 			'slider_external_url', // $id
 			'Slide URL', // $title
 			array( $this, 'show_slider_ext_url' ), // $callback
-			'slider', // $page
+			'mhcarousel', // $page
 			'normal', // $context
 			'high'
 		); // $priority

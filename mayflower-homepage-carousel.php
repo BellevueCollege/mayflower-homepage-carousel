@@ -61,11 +61,12 @@ class Mayflower_Homepage_Carousel {
 			'taxonomies'    => array( /*'category', 'post_tag',*/ ), // this is IMPORTANT
 		);
 
-		register_post_type( 'slider', $args );
+		register_post_type( 'mhcarousel', $args );
 	}
 
 	public function image_sizes() {
 		add_image_size( 'mhcarousel-featured-size', 1170, 488, true );
+		add_image_size( 'mhcarousel-thumbnail-size', 300, 125, true );
 	}
 }
 

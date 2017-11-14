@@ -7,7 +7,7 @@ jQuery(document).ready(function($) {
 		update: function(event, ui) {
 			var theOrder = $(this).sortable('toArray');
 			var data = {
-				action: 'mayflower_cpt_update_post_order',
+				action: 'mhcarousel_update_post_order',
 				postType: $(this).attr('data-post-type'),
 				order: theOrder
 			};
