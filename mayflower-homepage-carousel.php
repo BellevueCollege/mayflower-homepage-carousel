@@ -65,7 +65,7 @@ class Mayflower_Homepage_Carousel {
 	}
 
 	public function image_sizes() {
-		add_image_size( 'mhcarousel-featured-size', 1170, 488, true );
+		add_image_size( 'mhcarousel-featured-size', 1680, 350, true );
 		add_image_size( 'mhcarousel-thumbnail-size', 300, 125, true );
 	}
 }
