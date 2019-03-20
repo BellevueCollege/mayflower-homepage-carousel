@@ -4,7 +4,7 @@
 Plugin Name: Mayflower Homepage Carousel
 Plugin URI: https://github.com/BellevueCollege/mayflower-homepage-carousel
 Description: Add featured slider elements to Mayflower sites.
-Version: 0.2
+Version: 1
 Author: Bellevue College DevCom
 Author URI: http://www.bellevuecollege.edu/
 License: GPLv3
@@ -44,7 +44,7 @@ class Mayflower_Homepage_Carousel {
 			'search_items'       => 'Search Story',
 			'not_found'          => 'No Story found',
 			'not_found_in_trash' => 'No Story found in Trash',
-			'menu_name'          => 'Featured Story',
+			'menu_name'          => 'Featured Stories',
 		);
 
 		$args = array(
