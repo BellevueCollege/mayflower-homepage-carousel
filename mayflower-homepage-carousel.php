@@ -33,32 +33,31 @@ class Mayflower_Homepage_Carousel {
 
 	public function bc_slider_register() {
 		$labels = array(
-			'name'               => 'Featured Slider',
-			'singular_name'      => 'Slide',
+			'name'               => 'Featured Stories (Carousel)',
+			'singular_name'      => 'Story',
 			'add_new'            => 'Add New',
-			'Slide',
-			'add_new_item'       => 'Add New Slide',
-			'edit_item'          => 'Edit Slide',
-			'new_item'           => 'New Slide',
-			'all_items'          => 'Slide List',
-			'view_item'          => 'View Slide',
-			'search_items'       => 'Search Slides',
-			'not_found'          => 'No Slides found',
-			'not_found_in_trash' => 'No Slides found in Trash',
-			'parent_item_colon'  => '',
-			'menu_name'          => 'Featured Slider',
+			'add_new_item'       => 'Add New Story',
+			'edit_item'          => 'Edit Story',
+			'new_item'           => 'New Story',
+			'all_items'          => 'Story List',
+			'view_item'          => 'View Story',
+			'search_items'       => 'Search Story',
+			'not_found'          => 'No Story found',
+			'not_found_in_trash' => 'No Story found in Trash',
+			'menu_name'          => 'Featured Story',
 		);
 
 		$args = array(
 			'labels'        => $labels,
-			'public'        => true,
+			'menu_icon'     => 'dashicons-align-center',
+			'public'        => false,
 			'show_ui'       => true,
-			'hierarchical'  => true,
-			'has_archive'   => true,
+			'hierarchical'  => false,
+			'has_archive'   => false,
 			'rewrite'       => true,
-			'menu_position' => 4,
-			'supports'      => array( 'title', 'editor', 'thumbnail', 'category', 'author', 'revisions', /*'page-attributes',*/ 'author', 'comments' ),
-			'taxonomies'    => array( /*'category', 'post_tag',*/ ), // this is IMPORTANT
+			'menu_position' => 5,
+			'supports'      => array( 'title', 'editor', 'thumbnail', 'author', 'revisions' ),
+			'show_in_rest'  => true,
 		);
 
 		register_post_type( 'mhcarousel', $args );
