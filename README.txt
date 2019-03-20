@@ -19,9 +19,11 @@ a title, description, external link and featured image.
 1. Download plugin files from https://github.com/BellevueCollege/mayflower-homepage-carousel.
 2. Place the plugin folder in your `wp-content/plugins/` directory.
 3. Activate the plugin through the 'Plugins' menu in WordPress.
-4. You will see the 'Featured Slider' add-on on the sidebar of the dashboard.
+4. You will see the 'Featured Story' add-on on the sidebar of the dashboard.
 
 == Changelog ==
+= 1 =
+* Initial Release
 
 = 0.2 =
 * Split slider.php into classes
